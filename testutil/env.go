@@ -17,6 +17,11 @@ import (
 	"github.com/pkg/errors"
 )
 
+type Blob struct {
+	Descriptor ocispec.Descriptor
+	Data       []byte
+}
+
 type Env struct {
 	t *testing.T
 
@@ -33,16 +38,21 @@ func NewEnv(t *testing.T) *Env {
 	}
 }
 
-func (e *Env) AddBlob(dt []byte) (digest.Digest, error) {
+func (e *Env) AddBlob(b *Blob) (digest.Digest, error) {
 	// validate JSON to error early
 	m := map[string]interface{}{}
-	if err := json.Unmarshal(dt, &m); err != nil {
+	if err := json.Unmarshal(b.Data, &m); err != nil {
 		return "", err
 	}
 
-	dgst := digest.FromBytes(dt)
+	dgst := digest.FromBytes(b.Data)
+	if b.Descriptor.Digest != "" {
+		if dgst != b.Descriptor.Digest {
+			return "", errors.Errorf("blob digest %s does not match descriptor digest %s", dgst, b.Descriptor.Digest)
+		}
+	}
 	e.mu.Lock()
-	e.blobs[dgst] = dt
+	e.blobs[dgst] = b.Data
 	e.mu.Unlock()
 	e.t.Logf("added blob %s", dgst)
 	return dgst, nil
