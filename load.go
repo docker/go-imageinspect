@@ -203,7 +203,7 @@ func (l *Loader) fetch(ctx context.Context, fetcher remotes.Fetcher, desc ocispe
 		} else {
 			p := desc.Platform
 			if p == nil {
-				p, err = l.readPlatformFromConfig(ctx, mfst.Config)
+				p, err = l.readPlatformFromConfig(ctx, fetcher, mfst.Config)
 				if err != nil {
 					return err
 				}
@@ -247,7 +247,12 @@ func (l *Loader) fetch(ctx context.Context, fetcher remotes.Fetcher, desc ocispe
 	return nil
 }
 
-func (l *Loader) readPlatformFromConfig(ctx context.Context, desc ocispec.Descriptor) (*ocispec.Platform, error) {
+func (l *Loader) readPlatformFromConfig(ctx context.Context, fetcher remotes.Fetcher, desc ocispec.Descriptor) (*ocispec.Platform, error) {
+	_, err := remotes.FetchHandler(l.cache, fetcher)(ctx, desc)
+	if err != nil {
+		return nil, err
+	}
+
 	dt, err := content.ReadBlob(ctx, l.cache, desc)
 	if err != nil {
 		return nil, err
