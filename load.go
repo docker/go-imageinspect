@@ -22,7 +22,8 @@ import (
 )
 
 const (
-	AnnotationReference = "vnd.docker.reference.digest"
+	AnnotationReference  = "vnd.docker.reference.digest"
+	AnnotationImageTitle = "org.opencontainers.image.title"
 )
 
 type ContentCache interface {
@@ -146,7 +147,20 @@ func (l *Loader) Load(ctx context.Context, ref string) (*Result, error) {
 		img.Size = size
 		img.Platform = platform
 
+		annotations := make(map[string]string, len(mfst.manifest.Annotations)+len(mfst.desc.Annotations))
+		for k, v := range mfst.desc.Annotations {
+			annotations[k] = v
+		}
+		for k, v := range mfst.manifest.Annotations {
+			annotations[k] = v
+		}
+
+		if title, ok := annotations[AnnotationImageTitle]; ok {
+			img.Title = title
+		}
+
 		rr.Images[platform] = img
+
 	}
 
 	sort.Strings(rr.Platforms)
