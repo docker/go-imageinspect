@@ -139,3 +139,47 @@ func TestMultiArchManifest(t *testing.T) {
 	require.Equal(t, int64(50), img.Size)
 	require.Equal(t, "linux/amd64", img.Platform)
 }
+
+func TestTitle(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	env := testutil.NewEnv(t)
+
+	cfg, err := testutil.Config(ocispec.Image{})
+	require.NoError(t, err)
+	_, err = env.AddBlob(cfg)
+	require.NoError(t, err)
+
+	mfst, err := testutil.Manifest(ocispec.Manifest{
+		Config: cfg.Descriptor,
+		Annotations: map[string]string{
+			"org.opencontainers.image.title": "this is title",
+		},
+	})
+	require.NoError(t, err)
+	_, err = env.AddBlob(mfst)
+	require.NoError(t, err)
+
+	require.NoError(t, env.AddTag("docker.io/library/test:latest", mfst.Descriptor.Digest))
+
+	l, err := NewLoader(Opt{
+		CacheDir: t.TempDir(),
+		Resolver: env,
+	})
+	require.NoError(t, err)
+
+	r, err := l.Load(ctx, "test")
+	require.NoError(t, err)
+
+	require.Equal(t, mfst.Descriptor.Digest, r.Digest)
+	require.Equal(t, Manifest, r.ResultType)
+
+	require.Equal(t, 1, len(r.Platforms))
+	require.Equal(t, 1, len(r.Images))
+
+	img, ok := r.Images[r.Platforms[0]]
+	require.True(t, ok)
+
+	require.Equal(t, "this is title", img.Title)
+}
