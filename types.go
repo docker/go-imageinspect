@@ -29,15 +29,6 @@ type Signature struct {
 	Identity Identity
 }
 
-type SBOM struct {
-	Packages []Package
-}
-
-type Package struct {
-	Type      string // TODO: typed
-	ScanPhase string
-}
-
 type Image struct {
 	Title            string
 	Platform         string

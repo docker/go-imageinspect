@@ -159,6 +159,13 @@ func (l *Loader) Load(ctx context.Context, ref string) (*Result, error) {
 			img.Title = title
 		}
 
+		refs, ok := r.refs[dgst]
+		if ok {
+			if err := l.scanSBOM(ctx, fetcher, r, refs, &img); err != nil {
+				return nil, err // TODO: these errors should likely be stored in the result
+			}
+		}
+
 		rr.Images[platform] = img
 
 	}

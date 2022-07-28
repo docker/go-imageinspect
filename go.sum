@@ -16,6 +16,7 @@ github.com/cncf/xds/go v0.0.0-20210312221358-fbca930ec8ed/go.mod h1:eXthEFrGJvWH
 github.com/cncf/xds/go v0.0.0-20210805033703-aa0b78936158/go.mod h1:eXthEFrGJvWHgFFCl3hGmgk+/aYT6PnTQLykKQRLhEs=
 github.com/cncf/xds/go v0.0.0-20210922020428-25de7278fc84/go.mod h1:eXthEFrGJvWHgFFCl3hGmgk+/aYT6PnTQLykKQRLhEs=
 github.com/cncf/xds/go v0.0.0-20211011173535-cb28da3451f1/go.mod h1:eXthEFrGJvWHgFFCl3hGmgk+/aYT6PnTQLykKQRLhEs=
+github.com/codahale/rfc6979 v0.0.0-20141003034818-6a90f24967eb h1:EDmT6Q9Zs+SbUoc7Ik9EfrFqcylYqgPZ9ANSbTAntnE=
 github.com/containerd/cgroups v1.0.3 h1:ADZftAkglvCiD44c77s5YmMqaP2pzVCFZvBmAlBdAP4=
 github.com/containerd/containerd v1.6.6 h1:xJNPhbrmz8xAMDNoVjHy9YHtWwEQNS+CDkcIRh7t8Y0=
 github.com/containerd/containerd v1.6.6/go.mod h1:ZoP1geJldzCVY3Tonoz7b1IXk8rIX0Nltt5QE4OMNk0=
@@ -63,6 +64,8 @@ github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/google/go-cmp v0.5.7 h1:81/ik6ipDQS2aGcBfIN5dHDB36BwrStyeAQquSYCV4o=
 github.com/google/uuid v1.1.2/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/grpc-ecosystem/grpc-gateway v1.16.0/go.mod h1:BDjrQk3hbvj6Nolgz8mAMFbcEtjT1g+wF4CSlocrBnw=
+github.com/in-toto/in-toto-golang v0.3.3 h1:tkkEBU5i09UEeWKnrp6Rq4fXKAfpVXYMLRO5mDfnb3I=
+github.com/in-toto/in-toto-golang v0.3.3/go.mod h1:dbXecHGZSqRubmm5TXtvDSZT5JyaKD7ebVTiC2aMLWY=
 github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI2bnpBCr8=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/klauspost/compress v1.15.1 h1:y9FcTHGyrebwfP0ZZqFiaxTaiDnUrGkJkI+f583BL1A=
@@ -84,9 +87,14 @@ github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:
 github.com/prometheus/procfs v0.6.0/go.mod h1:cz+aTbrPOrUb4q7XlbU9ygM+/jj0fzG6c1xBZuNvfVA=
 github.com/prometheus/procfs v0.7.3 h1:4jVXhlkAyzOScmCkXBTOLRLTz8EeU+eyjrwB/EPq0VU=
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
+github.com/shibumi/go-pathspec v1.2.0 h1:KVKEDHYk7bQolRMs7nfzjT3SBOCgcXFJzccnj9bsGbA=
+github.com/shibumi/go-pathspec v1.2.0/go.mod h1:bDxCftD0fST3qXIlHoQ/fChsU4mWMVklXp1yPErQaaY=
 github.com/sirupsen/logrus v1.8.1 h1:dJKuHgqk1NNQlqoA6BTlM1Wf9DOH3NBjQyu0h9+AZZE=
 github.com/sirupsen/logrus v1.8.1/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
 github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=
+github.com/spdx/gordf v0.0.0-20201111095634-7098f93598fb/go.mod h1:uKWaldnbMnjsSAXRurWqqrdyZen1R7kxl8TkmWk2OyM=
+github.com/spdx/tools-golang v0.3.0 h1:rtm+DHk3aAt74Fh0Wgucb4pCxjXV8SqHCPEb2iBd30k=
+github.com/spdx/tools-golang v0.3.0/go.mod h1:RO4Y3IFROJnz+43JKm1YOrbtgQNljW4gAPpA/sY2eqo=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=

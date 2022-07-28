@@ -4,10 +4,12 @@ go 1.18
 
 require (
 	github.com/containerd/containerd v1.6.6
+	github.com/in-toto/in-toto-golang v0.3.3
 	github.com/moby/buildkit v0.10.3
 	github.com/opencontainers/go-digest v1.0.0
 	github.com/opencontainers/image-spec v1.0.3-0.20211202183452-c5a74bcca799
 	github.com/pkg/errors v0.9.1
+	github.com/spdx/tools-golang v0.3.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 )
@@ -21,6 +23,7 @@ require (
 	github.com/klauspost/compress v1.15.1 // indirect
 	github.com/moby/locker v1.0.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/shibumi/go-pathspec v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f // indirect
 	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
