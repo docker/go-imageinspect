@@ -166,6 +166,10 @@ func (l *Loader) Load(ctx context.Context, ref string) (*Result, error) {
 			}
 		}
 
+		if err := l.scanBuildInfo(ctx, fetcher, mfst.manifest.Config, &img); err != nil {
+			return nil, err
+		}
+
 		rr.Images[platform] = img
 
 	}

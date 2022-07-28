@@ -44,7 +44,8 @@ type Image struct {
 	Size             int64
 
 	Signatures []Signature
-	SBOM       *SBOM `json:",omitempty"`
+	SBOM       *SBOM       `json:",omitempty"`
+	Provenance *Provenance `json:",omitempty"`
 
 	// Build logs
 	// Hub identity
