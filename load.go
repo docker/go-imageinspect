@@ -161,7 +161,7 @@ func (l *Loader) Load(ctx context.Context, ref string) (*Result, error) {
 
 		refs, ok := r.refs[dgst]
 		if ok {
-			if err := l.scanSBOM(ctx, fetcher, r, refs, &img); err != nil {
+			if err := l.scanSBOM(ctx, fetcher, r, dgst, refs, &img); err != nil {
 				return nil, err // TODO: these errors should likely be stored in the result
 			}
 		}

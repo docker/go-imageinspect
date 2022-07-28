@@ -50,7 +50,7 @@ type spdxStatement struct {
 	Predicate json.RawMessage `json:"predicate"`
 }
 
-func (l *Loader) scanSBOM(ctx context.Context, fetcher remotes.Fetcher, r *result, refs []digest.Digest, img *Image) error {
+func (l *Loader) scanSBOM(ctx context.Context, fetcher remotes.Fetcher, r *result, subject digest.Digest, refs []digest.Digest, img *Image) error {
 	ctx = remotes.WithMediaTypeKeyPrefix(ctx, "application/vnd.in-toto+json", "intoto")
 
 	for _, dgst := range refs {
@@ -72,6 +72,24 @@ func (l *Loader) scanSBOM(ctx context.Context, fetcher remotes.Fetcher, r *resul
 				}
 				if err := json.Unmarshal(dt, &stmt); err != nil {
 					return err
+				}
+
+				if stmt.PredicateType != "https://spdx.dev/Document" {
+					return errors.Errorf("unexpected predicate type %s", stmt.PredicateType)
+				}
+
+				subjectValidated := false
+				for _, s := range stmt.Subject {
+					for alg, hash := range s.Digest {
+						if alg+":"+hash == subject.String() {
+							subjectValidated = true
+							break
+						}
+					}
+				}
+
+				if !subjectValidated {
+					return errors.Errorf("unable to validate subject %s, expected %s", stmt.Subject, subject.String())
 				}
 
 				doc, err := decodeSPDX(stmt.Predicate)
