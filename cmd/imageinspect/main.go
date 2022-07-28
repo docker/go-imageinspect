@@ -9,7 +9,7 @@ import (
 	"github.com/containerd/containerd/remotes/docker"
 	"github.com/moby/buildkit/util/appcontext"
 	"github.com/pkg/errors"
-	"github.com/tonistiigi/imageinspect"
+	"github.com/docker/go-imageinspect"
 )
 
 func main() {

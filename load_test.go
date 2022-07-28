@@ -6,7 +6,7 @@ import (
 
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/stretchr/testify/require"
-	"github.com/tonistiigi/imageinspect/testutil"
+	"github.com/docker/go-imageinspect/testutil"
 )
 
 func TestSingleArchManifest(t *testing.T) {

@@ -1,4 +1,4 @@
-module github.com/tonistiigi/imageinspect
+module github.com/docker/go-imageinspect
 
 go 1.18
 
