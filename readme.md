@@ -1,1 +1,0 @@
-Go library for accessing container images with their associated objects, typed metadata and verified signatures.
