@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"sync"
 	"testing"
 
@@ -130,7 +129,7 @@ func (e *Env) Fetch(ctx context.Context, desc ocispec.Descriptor) (io.ReadCloser
 	if !ok {
 		return nil, errors.Errorf("blob %s not found", desc.Digest)
 	}
-	return ioutil.NopCloser(bytes.NewReader(dt)), nil
+	return io.NopCloser(bytes.NewReader(dt)), nil
 }
 
 func (e *Env) Pusher(ctx context.Context, ref string) (remotes.Pusher, error) {
