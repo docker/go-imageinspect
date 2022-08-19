@@ -36,6 +36,7 @@ type Package struct {
 	DownloadURL string
 	HomepageURL string
 	License     []string
+	Files       []string
 
 	CPEs []string
 }
@@ -113,6 +114,15 @@ func addSPDX(img *Image, doc *spdx.Document2_2) {
 	}
 
 	for _, p := range doc.Packages {
+		var files []string
+		for _, f := range p.Files {
+			if f == nil {
+				// HACK: the SPDX parser is broken with multiple files in hasFiles
+				continue
+			}
+			files = append(files, f.FileName)
+		}
+
 		pkg := Package{
 			Name:        p.PackageName,
 			Version:     p.PackageVersion,
@@ -121,6 +131,7 @@ func addSPDX(img *Image, doc *spdx.Document2_2) {
 			HomepageURL: p.PackageHomePage,
 			DownloadURL: p.PackageDownloadLocation,
 			License:     strings.Split(p.PackageLicenseConcluded, " AND "),
+			Files:       files,
 		}
 
 		typ := pkgTypeUnknown
