@@ -163,7 +163,7 @@ func normalizeSBOM(sbom *SBOM) {
 
 func decodeSPDX(dt []byte) (s *spdx.Document2_2, err error) {
 	defer func() {
-		// The spdx tools JSON parser is reported to be panicing sometimes
+		// The spdx tools JSON parser is reported to be panicking sometimes
 		if v := recover(); v != nil {
 			s = nil
 			err = errors.Errorf("an error occurred during SPDX JSON document parsing: %+v", v)
@@ -172,7 +172,7 @@ func decodeSPDX(dt []byte) (s *spdx.Document2_2, err error) {
 
 	doc, err := jsonloader.Load2_2(bytes.NewReader(dt))
 	if err != nil {
-		return nil, errors.Errorf("unable to decode spdx: %w", err)
+		return nil, errors.Wrap(err, "unable to decode spdx")
 	}
 	return doc, nil
 }

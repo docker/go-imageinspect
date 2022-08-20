@@ -10,6 +10,7 @@ import (
 	"github.com/containerd/containerd/remotes"
 	binfotypes "github.com/moby/buildkit/util/buildinfo/types"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
+	"github.com/pkg/errors"
 )
 
 func (l *Loader) scanBuildInfo(ctx context.Context, fetcher remotes.Fetcher, desc ocispec.Descriptor, img *Image) error {
@@ -21,19 +22,24 @@ func (l *Loader) scanBuildInfo(ctx context.Context, fetcher remotes.Fetcher, des
 	if err != nil {
 		return err
 	}
+
 	var cfg binfotypes.ImageConfig
 	if err := json.Unmarshal(dt, &cfg); err != nil {
 		return err
 	}
 
+	if cfg.BuildInfo == "" {
+		return nil
+	}
+
 	dt, err = base64.StdEncoding.DecodeString(cfg.BuildInfo)
 	if err != nil {
-		return err
+		return errors.Wrapf(err, "failed to decode buildinfo base64")
 	}
 
 	var bi binfotypes.BuildInfo
 	if err := json.Unmarshal(dt, &bi); err != nil {
-		return err
+		return errors.Wrapf(err, "failed to decode buildinfo")
 	}
 
 	p := img.Provenance
