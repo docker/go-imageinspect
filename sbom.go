@@ -1,3 +1,17 @@
+// Copyright 2022 go-imageinspect authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package imageinspect
 
 import (
@@ -163,7 +177,7 @@ func normalizeSBOM(sbom *SBOM) {
 
 func decodeSPDX(dt []byte) (s *spdx.Document2_2, err error) {
 	defer func() {
-		// The spdx tools JSON parser is reported to be panicing sometimes
+		// The spdx tools JSON parser is reported to be panicking sometimes
 		if v := recover(); v != nil {
 			s = nil
 			err = errors.Errorf("an error occurred during SPDX JSON document parsing: %+v", v)
@@ -172,7 +186,7 @@ func decodeSPDX(dt []byte) (s *spdx.Document2_2, err error) {
 
 	doc, err := jsonloader.Load2_2(bytes.NewReader(dt))
 	if err != nil {
-		return nil, errors.Errorf("unable to decode spdx: %w", err)
+		return nil, errors.Wrap(err, "unable to decode spdx")
 	}
 	return doc, nil
 }

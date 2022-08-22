@@ -1,3 +1,17 @@
+// Copyright 2022 go-imageinspect authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package testutil
 
 import (
@@ -5,7 +19,6 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"sync"
 	"testing"
 
@@ -130,7 +143,7 @@ func (e *Env) Fetch(ctx context.Context, desc ocispec.Descriptor) (io.ReadCloser
 	if !ok {
 		return nil, errors.Errorf("blob %s not found", desc.Digest)
 	}
-	return ioutil.NopCloser(bytes.NewReader(dt)), nil
+	return io.NopCloser(bytes.NewReader(dt)), nil
 }
 
 func (e *Env) Pusher(ctx context.Context, ref string) (remotes.Pusher, error) {
