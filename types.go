@@ -14,7 +14,9 @@
 
 package imageinspect
 
-import "github.com/opencontainers/go-digest"
+import (
+	"github.com/opencontainers/go-digest"
+)
 
 type ResultType string
 
@@ -58,9 +60,66 @@ type Image struct {
 	Size             int64
 
 	Signatures []Signature
+	Config     *Config     `json:",omitempty"`
 	SBOM       *SBOM       `json:",omitempty"`
 	Provenance *Provenance `json:",omitempty"`
 
 	// Build logs
 	// Hub identity
+}
+
+func (r *Result) Signatures() map[string][]Signature {
+	if len(r.Images) == 0 {
+		return nil
+	}
+	res := make(map[string][]Signature)
+	for p, img := range r.Images {
+		if len(img.Signatures) == 0 {
+			continue
+		}
+		res[p] = img.Signatures
+	}
+	return res
+}
+
+func (r *Result) Configs() map[string]*Config {
+	if len(r.Images) == 0 {
+		return nil
+	}
+	res := make(map[string]*Config)
+	for p, img := range r.Images {
+		if img.SBOM == nil {
+			continue
+		}
+		res[p] = img.Config
+	}
+	return res
+}
+
+func (r *Result) Provenances() map[string]*Provenance {
+	if len(r.Images) == 0 {
+		return nil
+	}
+	res := make(map[string]*Provenance)
+	for p, img := range r.Images {
+		if img.Provenance == nil {
+			continue
+		}
+		res[p] = img.Provenance
+	}
+	return res
+}
+
+func (r *Result) SBOMs() map[string]*SBOM {
+	if len(r.Images) == 0 {
+		return nil
+	}
+	res := make(map[string]*SBOM)
+	for p, img := range r.Images {
+		if img.SBOM == nil {
+			continue
+		}
+		res[p] = img.SBOM
+	}
+	return res
 }
