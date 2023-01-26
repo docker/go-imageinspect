@@ -44,6 +44,11 @@ target "vendor-update" {
   output = ["."]
 }
 
+target "bin" {
+  target = "bin"
+  output = ["type=local,dest=bin"]
+}
+
 target "test" {
   target = "test-coverage"
   output = [bindir("coverage")]

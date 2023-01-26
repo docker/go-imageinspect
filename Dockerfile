@@ -23,6 +23,7 @@ ARG LICENSE_FILES=".*\(Dockerfile\|\.go\|\.hcl\|\.sh\)"
 
 FROM golangci/golangci-lint:${GOLANGCI_LINT_VERSION}-alpine AS golangci-lint
 FROM ghcr.io/google/addlicense:${ADDLICENSE_VERSION} AS addlicense
+FROM --platform=$BUILDPLATFORM tonistiigi/xx:1.1.2 AS xx
 
 FROM golang:${GO_VERSION}-alpine AS base
 RUN apk add --no-cache cpio findutils git linux-headers
@@ -30,6 +31,7 @@ ENV CGO_ENABLED=0
 WORKDIR /src
 
 FROM base AS build-base
+COPY --link --from=xx / /
 COPY go.* .
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
@@ -90,3 +92,14 @@ RUN --mount=type=bind,target=. \
 
 FROM scratch AS test-coverage
 COPY --from=test /tmp/coverage.txt /coverage.txt
+
+FROM build-base AS build-bin
+ARG TARGETPLATFORM
+RUN --mount=type=bind,target=. \
+    --mount=type=cache,target=/root/.cache \
+    --mount=type=cache,target=/go/pkg/mod \
+    xx-go build -ldflags "-extldflags -static" -o /usr/bin/imageinspect ./cmd/imageinspect && \
+    xx-verify --static /usr/bin/imageinspect
+    
+FROM scratch as bin
+COPY --from=build-bin /usr/bin/imageinspect ./
