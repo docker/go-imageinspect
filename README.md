@@ -1,4 +1,4 @@
-[![CI Status](https://img.shields.io/github/actions/workflow/status/docker/go-imageinspect/ci.yml?branch=main&label=ci&logo=github&style=flat-square)](https://github.com/docker/go-imageinspect/actions?query=workflow%3Aci)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/docker/go-imageinspect/ci.yml?label=ci&logo=github&style=flat-square)](https://github.com/docker/go-imageinspect/actions?query=workflow%3Aci)
 
 ## About
 
