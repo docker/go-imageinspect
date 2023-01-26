@@ -2,8 +2,18 @@
 
 ## About
 
-Go library for accessing container images with their associated objects, typed
-metadata and verified signatures.
+Go library for accessing container images with their associated objects and
+typed metadata.
+
+## Rationale
+
+Image authors are increasingly distributing associated metadata and artifacts
+alongside their images, such as OCI annotations, SLSA Provenance, SBOMs,
+signatures, and more. The exact method of storage can differ across the ecosystem,
+making this information difficult to consume.
+
+This library provides a unified interface for accessing this metadata and
+ensuring that it can be consumed consistently.
 
 ## Contributing
 
