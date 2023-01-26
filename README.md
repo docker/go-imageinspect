@@ -15,6 +15,16 @@ making this information difficult to consume.
 This library provides a unified interface for accessing this metadata and
 ensuring that it can be consumed consistently.
 
+## Usage
+
+go-imageinspect is intended to be used as a library. However, for development
+purposes, a simple command line tool is provided for prototyping:
+
+```console
+$ docker buildx bake bin
+$ ./bin/imageinspect moby/buildkit:latest
+```
+
 ## Contributing
 
 Want to contribute? Awesome! You can find information about contributing to
