@@ -48,10 +48,10 @@ If your pull request is not accepted on the first try, don't be discouraged! If
 there's a problem with the implementation, hopefully you received feedback on
 what to improve.
 
-We're trying very hard to keep Buildx lean and focused. We don't want it to
-do everything for everybody. This means that we might decide against
+We're trying very hard to keep go-imageinspect lean and focused. We don't want
+it to do everything for everybody. This means that we might decide against
 incorporating a new feature. However, there might be a way to implement that
-feature *on top of* Buildx.
+feature *on top of* go-imageinspect.
 
 ### Design and cleanup proposals
 
