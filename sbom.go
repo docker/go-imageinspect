@@ -130,10 +130,6 @@ func addSPDX(img *Image, doc *spdx.Document) {
 	for _, p := range doc.Packages {
 		var files []string
 		for _, f := range p.Files {
-			if f == nil {
-				// HACK: the SPDX parser is broken with multiple files in hasFiles
-				continue
-			}
 			files = append(files, f.FileName)
 		}
 
