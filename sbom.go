@@ -26,8 +26,8 @@ import (
 	intoto "github.com/in-toto/in-toto-golang/in_toto"
 	"github.com/opencontainers/go-digest"
 	"github.com/pkg/errors"
-	"github.com/spdx/tools-golang/jsonloader"
-	"github.com/spdx/tools-golang/spdx"
+	spdx_json "github.com/spdx/tools-golang/json"
+	spdx "github.com/spdx/tools-golang/spdx/v2_3"
 )
 
 type SBOM struct {
@@ -121,7 +121,7 @@ func (l *Loader) scanSBOM(ctx context.Context, fetcher remotes.Fetcher, r *resul
 	return nil
 }
 
-func addSPDX(img *Image, doc *spdx.Document2_2) {
+func addSPDX(img *Image, doc *spdx.Document) {
 	sbom := img.SBOM
 	if sbom == nil {
 		sbom = &SBOM{}
@@ -140,12 +140,21 @@ func addSPDX(img *Image, doc *spdx.Document2_2) {
 		pkg := Package{
 			Name:        p.PackageName,
 			Version:     p.PackageVersion,
-			Creator:     PackageCreator{Name: p.PackageOriginatorPerson, Org: p.PackageOriginatorOrganization},
 			Description: p.PackageDescription,
 			HomepageURL: p.PackageHomePage,
 			DownloadURL: p.PackageDownloadLocation,
 			License:     strings.Split(p.PackageLicenseConcluded, " AND "),
 			Files:       files,
+		}
+		if p.PackageOriginator != nil && p.PackageOriginator.Originator != "" {
+			creator := PackageCreator{}
+			switch p.PackageOriginator.OriginatorType {
+			case "Person":
+				creator.Name = p.PackageOriginator.Originator
+			case "Organization":
+				creator.Org = p.PackageOriginator.Originator
+			}
+			pkg.Creator = creator
 		}
 
 		typ := pkgTypeUnknown
@@ -186,18 +195,13 @@ func normalizeSBOM(sbom *SBOM) {
 	}
 }
 
-func decodeSPDX(dt []byte) (s *spdx.Document2_2, err error) {
-	defer func() {
-		// The spdx tools JSON parser is reported to be panicking sometimes
-		if v := recover(); v != nil {
-			s = nil
-			err = errors.Errorf("an error occurred during SPDX JSON document parsing: %+v", v)
-		}
-	}()
-
-	doc, err := jsonloader.Load2_2(bytes.NewReader(dt))
+func decodeSPDX(dt []byte) (s *spdx.Document, err error) {
+	doc, err := spdx_json.Load2_3(bytes.NewReader(dt))
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to decode spdx")
+	}
+	if doc == nil {
+		return nil, errors.New("decoding produced empty spdx document")
 	}
 	return doc, nil
 }
