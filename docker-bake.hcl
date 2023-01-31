@@ -46,6 +46,7 @@ target "vendor-update" {
 
 target "bin" {
   target = "bin"
+  platforms = ["local"]
   output = ["type=local,dest=bin"]
 }
 
