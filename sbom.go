@@ -27,6 +27,7 @@ import (
 	"github.com/opencontainers/go-digest"
 	"github.com/pkg/errors"
 	spdx_json "github.com/spdx/tools-golang/json"
+	spdx_common "github.com/spdx/tools-golang/spdx/common"
 	spdx "github.com/spdx/tools-golang/spdx/v2_3"
 )
 
@@ -121,7 +122,7 @@ func (l *Loader) scanSBOM(ctx context.Context, fetcher remotes.Fetcher, r *resul
 	return nil
 }
 
-func addSPDX(img *Image, doc *spdx.Document) {
+func addSPDX(img *Image, doc spdxDocument) {
 	sbom := img.SBOM
 	if sbom == nil {
 		sbom = &SBOM{}
@@ -129,8 +130,14 @@ func addSPDX(img *Image, doc *spdx.Document) {
 
 	for _, p := range doc.Packages {
 		var files []string
-		for _, f := range p.Files {
-			files = append(files, f.FileName)
+		for _, relationship := range doc.RelationshipsByPackageID[p.PackageSPDXIdentifier] {
+			if relationship.Relationship == "CONTAINS" {
+				f, ok := doc.FilesByID[relationship.RefB.ElementRefID]
+				if !ok {
+					continue
+				}
+				files = append(files, f.FileName)
+			}
 		}
 
 		pkg := Package{
@@ -191,13 +198,44 @@ func normalizeSBOM(sbom *SBOM) {
 	}
 }
 
-func decodeSPDX(dt []byte) (s *spdx.Document, err error) {
+func decodeSPDX(dt []byte) (s spdxDocument, err error) {
 	doc, err := spdx_json.Load2_3(bytes.NewReader(dt))
 	if err != nil {
-		return nil, errors.Wrap(err, "unable to decode spdx")
+		return spdxDocument{}, errors.Wrap(err, "unable to decode spdx")
 	}
 	if doc == nil {
-		return nil, errors.New("decoding produced empty spdx document")
+		return spdxDocument{}, errors.New("decoding produced empty spdx document")
 	}
-	return doc, nil
+	return newSPDXWrapper(doc), nil
+}
+
+type spdxDocument struct {
+	*spdx.Document
+
+	PackagesByID map[spdx_common.ElementID]*spdx.Package
+	FilesByID    map[spdx_common.ElementID]*spdx.File
+
+	RelationshipsByPackageID map[spdx_common.ElementID][]*spdx.Relationship
+}
+
+func newSPDXWrapper(doc *spdx.Document) spdxDocument {
+	packagesByID := map[spdx_common.ElementID]*spdx.Package{}
+	for _, p := range doc.Packages {
+		packagesByID[p.PackageSPDXIdentifier] = p
+	}
+	filesByID := map[spdx_common.ElementID]*spdx.File{}
+	for _, f := range doc.Files {
+		filesByID[f.FileSPDXIdentifier] = f
+	}
+	relationshipsByPackageID := map[spdx_common.ElementID][]*spdx.Relationship{}
+	for _, r := range doc.Relationships {
+		relationshipsByPackageID[r.RefA.ElementRefID] = append(relationshipsByPackageID[r.RefA.ElementRefID], r)
+	}
+
+	return spdxDocument{
+		Document:                 doc,
+		PackagesByID:             packagesByID,
+		FilesByID:                filesByID,
+		RelationshipsByPackageID: relationshipsByPackageID,
+	}
 }
