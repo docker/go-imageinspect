@@ -1,10 +1,13 @@
+---
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    open-pull-requests-limit: 10
-    directory: "/"
-    schedule:
-      interval: "daily"
+  - package-ecosystem: github-actions
+    directory: /
+    cooldown:
+      default-days: 7
     labels:
-      - "dependencies"
-      - "bot"
+      - dependencies
+      - bot
+    open-pull-requests-limit: 10
+    schedule:
+      interval: daily
