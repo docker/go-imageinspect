@@ -58,6 +58,7 @@ type Image struct {
 	Size             int64
 
 	Signatures []Signature
+	Config     *Config     `json:",omitempty"`
 	SBOM       *SBOM       `json:",omitempty"`
 	Provenance *Provenance `json:",omitempty"`
 

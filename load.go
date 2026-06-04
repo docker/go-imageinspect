@@ -173,6 +173,10 @@ func (l *Loader) Load(ctx context.Context, ref string) (*Result, error) {
 			img.Title = title
 		}
 
+		if err := l.scanConfig(ctx, fetcher, mfst.manifest.Config, &img); err != nil {
+			return nil, err
+		}
+
 		refs, ok := r.refs[dgst]
 		if ok {
 			if err := l.scanSBOM(ctx, fetcher, r, dgst, refs, &img); err != nil {

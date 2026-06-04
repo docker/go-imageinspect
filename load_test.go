@@ -70,6 +70,7 @@ func TestSingleArchManifest(t *testing.T) {
 
 	require.Equal(t, int64(300), img.Size)
 	require.Equal(t, "linux/arm64", img.Platform)
+	require.NotNil(t, img.Config)
 }
 
 func TestMultiArchManifest(t *testing.T) {
@@ -146,12 +147,14 @@ func TestMultiArchManifest(t *testing.T) {
 
 	require.Equal(t, int64(25), img.Size)
 	require.Equal(t, "linux/arm64", img.Platform)
+	require.NotNil(t, img.Config)
 
 	img, ok = r.Images["linux/amd64"]
 	require.True(t, ok)
 
 	require.Equal(t, int64(50), img.Size)
 	require.Equal(t, "linux/amd64", img.Platform)
+	require.NotNil(t, img.Config)
 }
 
 func TestTitle(t *testing.T) {
