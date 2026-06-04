@@ -24,7 +24,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -39,7 +39,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
       -
         name: Test
         uses: docker/bake-action@v2
@@ -47,6 +47,6 @@ jobs:
           targets: test
       -
         name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3
         with:
           file: ${{ env.DESTDIR }}/coverage.txt
