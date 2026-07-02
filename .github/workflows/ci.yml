@@ -30,7 +30,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       -
         name: Validate
-        uses: docker/bake-action@v2
+        uses: docker/bake-action@v7.2.0
         with:
           targets: ${{ matrix.target }}
 
@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
       -
         name: Test
-        uses: docker/bake-action@v2
+        uses: docker/bake-action@v7.2.0
         with:
           targets: test
       -
